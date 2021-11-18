@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺北市綠色餐廳</title>
+
+    <!-- https://fonts.google.com/noto/specimen/Noto+Serif+TC?subset=chinese-traditional -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #F3F0D7;
+        }
+        table {
+            margin: 0 auto;
+        }
+        thead, tr, td {
+            border: 1px solid;
+        }
+        th {
+            border: 1px solid;
+            margin: 1px;
+            background-color: #CEE5D0;
+        }
+        th:hover {
+            background-color: #FED2AA;
+        }
+        h1#greenRestaurant {
+            color:green;
+            font-family: 'Noto Serif TC', serif;
+            text-align:center;
+        }
+        div#searchBar {
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <h1 id='greenRestaurant'>臺北市綠色餐廳</h1>
+    <div id='searchBar'>
+        <input type="text" id="qFilter" placeholder="請輸入關鍵字" value="">
+        <button id='btn_request'>Search</button>
+    </div>
+    <table>
+        <thead id='tableHead'>
+        </thead>
+    </table>
+    <h2></h2>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+    //set url
+    let url = 'https://data.taipei/api/v1/dataset/d706f428-b2c7-4591-9ebf-9f5cd7408f47?scope=resourceAquire';
+
+    //main course
+    document.querySelector('button#btn_request').addEventListener('click', function(event){
+        //Remove previous table
+        var Table = document.getElementById("tableHead");
+        Table.innerHTML = "";
+
+        //Create a regular expression as filter for searching
+        let re = new RegExp(document.querySelector("input#qFilter").value, "gm");
+
+        $.get(url, function(obj){
+            let row      = document.createElement("tr");
+
+            //Create new table headers
+            let id       = document.createElement("th");
+            let name     = document.createElement("th");
+            let phone    = document.createElement("th");
+            let address  = document.createElement("th");
+
+            //Put text into table headers
+            id.appendChild(document.createTextNode('餐廳編號'));
+            name.appendChild(document.createTextNode('餐廳名稱'));
+            phone.appendChild(document.createTextNode('餐館地址'));
+            address.appendChild(document.createTextNode('餐館電話'));
+
+            //Put table headers under table row
+            row.appendChild(id);
+            row.appendChild(name);
+            row.appendChild(phone);
+            row.appendChild(address);
+
+            //Put table row under table head
+            document.querySelector('thead#tableHead').appendChild(row);
+
+            let result = obj.result.results;
+            let count = 0;
+            for(let restaurant of result){
+                str = JSON.stringify(restaurant);
+                if(str.match(re, "i")) {
+                    //Counting how many matches we got
+                    count += 1;
+                    //Create new row
+                    let newRow      = document.createElement("tr");
+
+                    //Create new table headers
+                    let newId       = document.createElement("th");
+                    let newName     = document.createElement("th");
+                    let newPhone    = document.createElement("th");
+                    let newAddress  = document.createElement("th");
+
+                    //Put text into table headers
+                    newId.appendChild(document.createTextNode(restaurant['_id']));
+                    newName.appendChild(document.createTextNode(restaurant['餐廳名稱']));
+                    newPhone.appendChild(document.createTextNode(restaurant['餐館地址']));
+                    newAddress.appendChild(document.createTextNode(restaurant['餐館電話']));
+
+                    //Put table headers under table row
+                    newRow.appendChild(newId);
+                    newRow.appendChild(newName);
+                    newRow.appendChild(newPhone);
+                    newRow.appendChild(newAddress);
+
+                    //Put table row under table head
+                    document.querySelector('thead#tableHead').appendChild(newRow);
+                }
+            }
+            console.log(`count =  ${count}`);
+        });
+    });
+    </script>
+    
+</body>
+</html>
