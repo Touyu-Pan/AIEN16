@@ -54,3 +54,8 @@
   - direct to : https://tw.apple.com/a/b/c
 - href="a/b/c" : 從**當前**目錄開始
   - direct to : https://tw.apple.com/a/a/b/c
+
+## Docker
+- exec<br>
+  盡量少用，除非是有新功能要整合進去，但不確定要怎麼做，才先用exec做測試，不然更改了沒記錄到，
+  別人就沒辦法還原你的環境了，就算用了也要**寫回Dockerfile裡**
