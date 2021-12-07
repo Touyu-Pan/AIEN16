@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 2</title>
+    <link rel="stylesheet" href="../css/fontawesome-free-5.15.4-web/css/all.min.css">
+    <style>
+        .wrapper{
+            position: relative;
+            width:800px;
+            height:300px;
+            overflow: hidden;
+            margin:0 auto;   
+        }
+        ul{
+            margin:0;
+            padding: 0;
+            position: absolute;
+        }
+        li{
+            margin:0;
+            padding: 0;
+            list-style: none;
+        }
+        ul.slides{
+            width: 3200px;
+            left: 0px;
+            transition: all .5s;
+        }
+        ul.slides li{
+            width:800px;
+            height:300px;
+            overflow: hidden;
+            float: left;
+        }
+        ul.slides li img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .dot{
+            bottom:10px;
+            width:100%;
+            display: flex;
+            justify-content: center;
+        }
+        .dot li{
+            border:1px solid #fff;
+            /* border-radius: 50%; */
+            margin: 0 5px;
+            width:24px;
+            height: 10px;
+        }
+        .dot li:hover{
+            background: #fff;
+        }
+        .slide_btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top:0;
+            bottom:0;
+            width: 30px;
+            color:#fff;
+            position: absolute;
+            font-size:24px;  
+        }
+        #prevSlide{            
+            left:0;                    
+        }
+        #nextSlide{            
+            right:0;                
+        }
+        .slide_btn i{
+            color:rgba(255,255,255,.6);                        
+            transition: .5s;
+        }
+        .slide_btn:hover i{
+            color:rgba(255,255,255,1);            
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <ul class="slides">
+            <li><img src="images/slide1.jpg" alt=""></li>
+            <li><img src="images/slide2.jpg" alt=""></li>
+            <li><img src="images/slide3.jpg" alt=""></li>
+            <li><img src="images/slide4.jpg" alt=""></li>
+        </ul>
+        <ul class="dot">
+            <li id="1"></li>
+            <li id="2"></li>
+            <li id="3"></li>
+            <li id="4"></li>
+        </ul>
+        <div id="prevSlide" class="slide_btn">
+            <i class="fas fa-caret-left"></i>
+        </div>
+        <div  id="nextSlide" class="slide_btn">
+            <i class="fas fa-caret-right"></i>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+    <script>
+        let slideNum=0;
+        let slideCount=$(".slides li").length;
+        let lastIndex=slideCount-1;
+        console.log(`slideCount = ${slideCount}`);
+
+        var intervalID = setInterval(nextSlide, 1500);
+
+        $(".wrapper").mouseenter(function(){
+            clearInterval(intervalID)
+        }).mouseleave(function(){
+            intervalID = setInterval(nextSlide, 1500);
+            console.log("mouseleave");
+        })
+
+        //initial setting
+        $(".dot li").eq(0).css("background-color", "#fff");
+        $(".dot li").mouseenter(function(){
+            slideNum=$(this).index();
+            console.log(slideNum);
+            show();
+        })
+
+        //show the image
+        function show(){
+            $(".dot li").eq(slideNum).css("background-color", "white")
+            .siblings().css("background-color", "transparent")
+
+            let slideMove = 0 - 800 * slideNum;
+            $("ul.slides").css("left", slideMove)
+        }
+
+        //Manually go to next slide
+        $("#nextSlide").click(nextSlide)
+
+        function nextSlide(){
+            slideNum=++slideNum>lastIndex?0:slideNum;
+            show();
+        }
+
+        //Manually go to previous slide
+        $("#prevSlide").click(function(){
+            slideNum=--slideNum<0?lastIndex:slideNum;
+            show();
+        })
+
+
+    </script>
+</body>
+</html>

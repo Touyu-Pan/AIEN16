@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>homework 4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
+    crossorigin="anonymous">
+    <style>
+        .spanedRow {
+            vertical-align: middle;
+            width: 100px;
+        }
+        .distName {
+            width: 150px;
+        }
+        .zip {
+            width: 80px;
+        }
+        th {
+            border: solid 2px;
+        }
+        .selectedCity {
+            background-color: lightblue;
+        }
+        .selectedDist {
+            background-color: lightblue;
+        }
+        td {
+            border: solid 1px;
+        }
+        .testClass {
+            border: solid 3px;
+        }
+        .fixedSel {
+            position: fixed;
+            left: 340px;
+        }
+        .goToTop {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>縣市</th>
+                        <th>地區</th>
+                        <th>郵遞區碼</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+        <div class="fixedSel">
+            <select id="cityName">
+            </select>
+            <select id="districtsName">
+            </select>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+    <script src="taiwan_districts.js"></script>
+    <script>
+        $.each(data, function(index, value){
+            //get the name of the city
+            let cityName = value.name;
+
+            //get the districts of the city
+            let districts = value.districts;
+
+            //get the value we need to use fo rowspan later
+            let rowToSpan = districts.length;
+
+            $.each(districts, function(idx, val){
+                let zip = val.zip;
+                let districtsName = val.name;
+                let newRow;
+                if(idx == 0){
+                    //for the table at left side
+                    newRow=`<tr>
+                    <td rowspan=${rowToSpan} class="spanedRow" id=${cityName}>${cityName}</td>
+                    <td class="distName" id=${cityName}${districtsName}>${districtsName}</td>
+                    <td class="zip">${zip}</td>
+                    </tr>`;
+
+                    //for select menu
+                    let newCityNameOpt = `<option>${cityName}</option>`;
+                    $("#cityName").append(newCityNameOpt);
+                }else{
+                    //for the table at left side
+                    newRow=`<tr>
+                    <td class="distName" id=${cityName}${districtsName}>${districtsName}</td>
+                    <td class="zip">${zip}</td>
+                    </tr>`;
+                }
+                $("#tbody").append(newRow);
+            })
+        })
+
+        //for rendering the select menu
+        $("#cityName").change(function(){
+            //Empty the district menu
+            $("#districtsName").empty();
+
+            //get which city had been selected
+            let selCity = $("#cityName>option:selected").text();
+
+            //Rendering the city we chosed
+            $("*").find(".selectedCity").toggleClass("selectedCity");
+            // $("#"+selCity).addClass("selectedCity");
+            $("#"+selCity).addClass("selectedCity").addClass("goToTop");
+
+            //Rendering the district we chosed
+            $("*").find(".selectedDist").toggleClass("selectedDist");
+            $("#"+selCity).next("td").addClass("selectedDist");
+
+            $.each(data, function(index, value){
+                //get the name of the city
+                let cityName = value.name;
+
+                //get the districts of the city
+                let districts = value.districts;
+                if(cityName == selCity){
+                    $.each(districts, function(idx, val){
+                        //get the name of the district
+                        let districtsName = val.name;
+
+                        //append the districts we got to select menu
+                        let newDistOpt = `<option>${districtsName}</option>`;
+                        $("#districtsName").append(newDistOpt);
+                    })
+                }
+            })
+        })
+
+        $("#districtsName").change(function(){
+            //get which city had been selected
+            let selCity = $("#cityName>option:selected").text();
+
+            //get which district had been selected
+            let selDist = $("#districtsName>option:selected").text();
+
+            //Rendering the district we chosed
+            $("*").find(".selectedDist").toggleClass("selectedDist");
+            $("#"+selCity+selDist).addClass("selectedDist");
+        })
+
+        function init(){
+            //get which city had been selected
+            let selCity = $("#cityName>option:selected").text();
+
+            //Rendering the city we chosed
+            $("#"+selCity).addClass("selectedCity");
+
+            //Rendering the district we chosed
+            $("#"+selCity).next("td").addClass("selectedDist");
+
+            //initial district menu
+            $.each(data[0].districts, function(index, value){
+                let iniDistOpt = `<option>${value.name}</option>`;
+                $("#districtsName").append(iniDistOpt);
+            })
+        }
+        //the initial rendering
+        init();
+    </script>
+</body>
+</html>

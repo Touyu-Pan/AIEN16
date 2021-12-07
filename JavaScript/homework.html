@@ -53,8 +53,7 @@
     //set url
     let url = 'https://data.taipei/api/v1/dataset/d706f428-b2c7-4591-9ebf-9f5cd7408f47?scope=resourceAquire';
 
-    //main course
-    document.querySelector('button#btn_request').addEventListener('click', function(event){
+    function getRestaurant(event){
         //Remove previous table
         var Table = document.getElementById("tableHead");
         Table.innerHTML = "";
@@ -120,7 +119,13 @@
             }
             console.log(`count =  ${count}`);
         });
-    });
+    }
+
+    //add event listener to button
+    document.querySelector('button#btn_request').addEventListener('click', getRestaurant);
+
+    //init
+    getRestaurant();
     </script>
     
 </body>
