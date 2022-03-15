@@ -49,7 +49,7 @@
 - resp.**json()** : JSON
 
 ## href
-- 當前網址: https://tw.apple.com/a/b
+- 當前網址: https://tw.apple.com/a
 - href="/a/b/c" : 從**根**目錄開始
   - direct to : https://tw.apple.com/a/b/c
 - href="a/b/c" : 從**當前**目錄開始
