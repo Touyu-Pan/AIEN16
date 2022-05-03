@@ -13,6 +13,6 @@
 - 相當於直接return值，回傳給d
 - ![arrowFunction](./img/arrowFunction.png)
 
-## call function with a tag href
+## call function with a href tag
 - in this case, we use this function to confirm whether to delete the data or not.
 - ![hrefJsFunc](./img/hrefJsFunc.png)
